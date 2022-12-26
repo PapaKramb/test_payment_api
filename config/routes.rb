@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resource :qiwi_payments
+      post '/qiwi_webhooks/create', to: 'qiwi_webhooks#create'
+    end
+  end
 end
