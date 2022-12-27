@@ -27,4 +27,18 @@ module QiwiWebhookService
 
     response = HTTParty.put(base_url, headers: headers, query: query_params)
   end
+
+  # принимаем параметры и проверяем подпись уведомления
+  # не уверен в этом методе и его наверняка нужно отлаживать, но я не могу получить параметры
+  def signature_processing(payment_info)
+    signature_key = # здесь должен быть ключ вебхука
+    sign_fields = payment_info["payment"]["signFields"]
+    values = sign_fields.map { |field| payment[field] }
+
+    joined_values = values.join("|")
+
+    hash = OpenSSL::HMAC.hexdigest("SHA256", signature_key, joined_values)
+
+    hash == payment_info["hash"]
+  end
 end
